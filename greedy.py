@@ -8,7 +8,7 @@ Conducts a greedy method to solve the TSP.
 """
 import random
 import sys
-from utils import euclid
+import utils
 
 def greedy(points):
     """
@@ -34,12 +34,9 @@ def greedy(points):
     tour = [start] # append to this list
 
     # calculate euclidean distances between all points and save as a matrix called graph
-    graph = [[0 for _ in range(num_points)] for _ in range(num_points)] # empty matrix of num_points x num_points
-    for i in range(num_points):
-        for j in range(i+1,num_points):
-            dist = euclid(points[i],points[j])
-            graph[i][j] = graph[j][i] = dist # a symetrical matrix
+    graph = utils.graph_generator(points)
 
+    # apply the greedy algorithm - take the closest unvisited point to the current one
     for _ in range(num_points - 1):
         min_cost = sys.maxsize # create holding variables for cost and next point
         next_point = None
@@ -53,7 +50,7 @@ def greedy(points):
         visited[next_point] = True
         cost += min_cost
 
-    cost += graph[tour[-1]][0]  # Return to the starting city
+    cost += graph[tour[-1]][0]  # Return to the start
     tour.append(0)
 
     # finally return the points ordered by tour
