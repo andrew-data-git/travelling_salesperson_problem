@@ -19,7 +19,7 @@ def greedy(points):
         points : list of tuples
              Collection of x,y pairs for algorithm to be run on.
 
-    Outputs
+    Returns
     -------
         tour_points : tuple of tuples
             Of the form (k,(x,y)), where k is the position in the generated tour that (x,y) is visited.
@@ -30,6 +30,7 @@ def greedy(points):
     tour = []
     cost = 0
     start = random.randint(0, num_points) # randomly select a starting number
+
     visited[start] = True # visit the start
     tour = [start] # append to this list
 

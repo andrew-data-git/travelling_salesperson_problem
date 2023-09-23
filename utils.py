@@ -1,4 +1,4 @@
-"""Generic supporting functions."""
+"""Generic supporting functions for a TSP program."""
 import numpy as np
 import random
 import matplotlib.pyplot as plt
@@ -14,6 +14,11 @@ def euclid(point1, point2):
              Rise.
         point2 : int
              Run.
+
+    Outputs
+    -------
+        Euclidean distance between points 1 and 2
+
     """
     return np.sqrt((point1[0] - point2[0])**2 + (point1[1] - point2[1])**2)
 
@@ -27,6 +32,12 @@ def points_generator(num_points = 10, min = 0, max = 100):
              How many points require generation.
         min, max : int, int
              Min and max for random ints.
+
+    Outputs
+    -------
+        points : list
+            The 'points' object used in this program. Takes the form (point1,point2)
+
     """
     points = []
     for i in range(num_points):
@@ -40,7 +51,13 @@ def graph_generator(points):
     Parameters
     ----------
         points : list
-            A list (x,y) points to be evauluated.
+            A list (x,y) points to be evaluated.
+
+    Outputs
+    -------
+        graph : matrix of lists
+            An object to be plotted containing all possible line segments.
+
     """
     num_points = len(points)
     # calculate euclidean distances between all points and save as a matrix called graph
