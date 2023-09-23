@@ -1,17 +1,16 @@
 """
-Conducts the branch-and-bound method to solve the TSP.
-Adapted from ChatGPT code.
+Conducts probably the worst method to solve the TSP.
 
-        Parameters
+        Functions
         ----------
+            random_path(points)
+                 Runs a random path algorith upon a set of 'points'.
 
 """
 
 import random
-import sys
 import utils
 from utils import default_points
-import numpy as np
 
 points = default_points
 

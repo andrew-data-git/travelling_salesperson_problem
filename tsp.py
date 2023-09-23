@@ -23,9 +23,18 @@ class TravellingSalesperson:
     Methods
     -------
     print_points :
-        Prints the points in friendly mode.
-    plot_points :
-        Plots all the points and draws lines between them.
+        Prints the points to console.
+    make_graph :
+        Draws all line segments.
+    make_solution :
+        Draws solution line segments
+    pick_tsp :
+        Call algorithm to solve the TSP.
+    run_tsp :
+        Run algorithm to solve the TSP
+    plot_tsp :
+        Calls the other functions to run the algorithm,
+        print to console and plot the graphs.
     """
 
     def __init__(self, points, verbose = False):
@@ -36,15 +45,14 @@ class TravellingSalesperson:
         ----------
             points : list of tuples
                  Collection of x,y pairs for algorithm to be run on.
-            algorithm : str
-                 Includes "greedy", ... ; selects which TSP algorithm to run.
+            verbose : str
+                 Used in if statements to print additional info to the console.
         """
         self.points = points
         self.verbose = verbose
 
     def print_points(self):
-        """Prints points to console."""
-        # print("Input coordinates are:")
+        """Prints points to console in friendly mode."""
         print(self.points)
 
     def make_graph(self):
@@ -56,8 +64,32 @@ class TravellingSalesperson:
         graph_lines = mc.LineCollection(lines, linewidths=1)
         return graph_lines
 
+    def make_solution(self):
+        """Draws all solution line segments."""
+        # create the list of segments
+        segments = []
+        for i in range(len(self.tour_points) - 1):
+            segment = (self.tour_points[i][1], self.tour_points[i + 1][1])
+            segments.append(segment)
+        segments.append((self.tour_points[-1][1], self.tour_points[0][1]))  # return to the start again
+        solution_lines = mc.LineCollection(segments, linewidths=1, colors="red")
+        return solution_lines
+
     def pick_tsp(self, algorithm):
-        """Call an algorithm to solve the travelling salesperson problem."""
+        """
+        Call an algorithm to solve the travelling salesperson problem.
+
+        Parameters
+        ----------
+            algorithm : str
+                Name of the TSP-algorithm req
+
+        Outputs
+        -------
+            tour_points : tuple of tuples
+                Of the form (k,(x,y)), where k is the position in the
+                generated tour that (x,y) is visited.
+        """
         tour_points = None
         if algorithm == "greedy":
             tour_points = greedy.greedy(self.points)
@@ -71,23 +103,13 @@ class TravellingSalesperson:
         return tour_points
 
     def run_tsp(self, algorithm = "greedy"):
-        """Docstring"""
+        """Based on user selection, solve the travelling salesperson problem."""
         if algorithm in ["greedy","random_path"]:
             print(f"Generating path covering all points by {algorithm} algorithm...")
             self.tour_points = self.pick_tsp(algorithm)
             self.plot_tsp()
         else:
             print("Algorithm not in list!")
-
-    def make_solution(self):
-        # create the list of segments
-        segments = []
-        for i in range(len(self.tour_points) - 1):
-            segment = (self.tour_points[i][1], self.tour_points[i + 1][1])
-            segments.append(segment)
-        segments.append((self.tour_points[-1][1], self.tour_points[0][1]))  # return to the start again
-        solution_lines = mc.LineCollection(segments, linewidths=1, colors="red")
-        return solution_lines
 
     def plot_tsp(self):
         """Draws the toured points line segments and labels with number."""
@@ -110,8 +132,5 @@ class TravellingSalesperson:
             y = point[1][1]
             ax.annotate(k, (x, y), xytext=(x+10, y+15), arrowprops = dict(arrowstyle="->"))
         ax.autoscale()
-        print("Complete.")
         plt.show()
-
-
-
+        print("Complete.")
