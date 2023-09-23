@@ -13,8 +13,6 @@ class TravellingSalesperson:
     """
     A class that contains points and methods for visualising the travelling salesperson algorithm.
 
-    ...
-
     Attributes
     ----------
     points : list of tuples
@@ -37,7 +35,7 @@ class TravellingSalesperson:
         print to console and plot the graphs.
     """
 
-    def __init__(self, points, verbose = False):
+    def __init__(self, points, verbose=False):
         """
         Constructs all the necessary attributes for the person object.
 
@@ -45,7 +43,7 @@ class TravellingSalesperson:
         ----------
             points : list of tuples
                  Collection of x,y pairs for algorithm to be run on.
-            verbose : str
+            verbose : bool
                  Used in if statements to print additional info to the console.
         """
         self.points = points
@@ -57,8 +55,9 @@ class TravellingSalesperson:
 
     def make_graph(self):
         """Draws all possible line segments."""
-        lines = list(itertools.combinations(self.points, 2)) # create line segments
-        if self.verbose == True: print(f"Created {len(lines)} line segments.")
+        lines = list(itertools.combinations(self.points, 2))    # create line segments
+        if self.verbose:
+            print(f"Created {len(lines)} line segments.")
 
         # plot in matplotlib
         graph_lines = mc.LineCollection(lines, linewidths=1)
@@ -84,34 +83,27 @@ class TravellingSalesperson:
             algorithm : str
                 Name of the TSP-algorithm req
 
-        Outputs
+        Returns
         -------
             tour_points : tuple of tuples
                 Of the form (k,(x,y)), where k is the position in the
                 generated tour that (x,y) is visited.
+            cost : float
+                Distance of solution tour.
         """
         tour_points = None
         if algorithm == "greedy":
-            tour_points = greedy.greedy(self.points)
+            tour_points, cost = greedy.greedy(self.points)
         elif algorithm == "random_path":
-            tour_points = random_path.random_path(self.points)
+            tour_points, cost = random_path.random_path(self.points)
         else:
             print("ERROR")
-        if self.verbose == True:
+        if self.verbose:
             print("Route is :")
             print(tour_points)
-        return tour_points
+        return tour_points, cost
 
-    def run_tsp(self, algorithm = "greedy"):
-        """Based on user selection, solve the travelling salesperson problem."""
-        if algorithm in ["greedy","random_path"]:
-            print(f"Generating path covering all points by {algorithm} algorithm...")
-            self.tour_points = self.pick_tsp(algorithm)
-            self.plot_tsp()
-        else:
-            print("Algorithm not in list!")
-
-    def plot_tsp(self):
+    def plot_tsp(self, algorithm):
         """Draws the toured points line segments and labels with number."""
         # plot in matplotlib with label
         graph_lines = self.make_graph()
@@ -130,7 +122,17 @@ class TravellingSalesperson:
         for k, point in enumerate(self.tour_points):
             x = point[1][0]
             y = point[1][1]
-            ax.annotate(k, (x, y), xytext=(x+10, y+15), arrowprops = dict(arrowstyle="->"))
+            ax.annotate(k, (x, y), xytext=(x+10, y+15), arrowprops=dict(arrowstyle="->"))
         ax.autoscale()
+        ax.set_title(f"TSP solved by {algorithm} algorithm at cost = {np.round(self.cost, 2)}")
         plt.show()
         print("Complete.")
+
+    def run_tsp(self, algorithm="greedy"):
+        """Based on user selection, solve the travelling salesperson problem."""
+        if algorithm in ["greedy", "random_path"]:
+            print(f"Generating path covering all points by {algorithm} algorithm...")
+            self.tour_points, self.cost = self.pick_tsp(algorithm)
+            self.plot_tsp(algorithm)
+        else:
+            print("Algorithm not in list!")

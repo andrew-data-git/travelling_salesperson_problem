@@ -10,9 +10,7 @@ Conducts probably the worst method to solve the TSP.
 
 import random
 import utils
-from utils import default_points
 
-points = default_points
 
 def random_path(points):
     """
@@ -23,10 +21,12 @@ def random_path(points):
         points : list of tuples
              Collection of x,y pairs for algorithm to be run on.
 
-    Outputs
+    Returns
     -------
         tour_points : tuple of tuples
             Of the form (k,(x,y)), where k is the position in the generated tour that (x,y) is visited.
+        cost : int
+            Distance of solution tour.
     """
     # variables
     num_points = len(points)
@@ -51,4 +51,4 @@ def random_path(points):
 
     # finally return the points ordered by tour
     tour_points = sorted(zip(tour, points), key=lambda pair: pair[0])
-    return tour_points
+    return tour_points, cost

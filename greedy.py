@@ -1,14 +1,15 @@
 """
 Conducts a greedy method to solve the TSP.
 
-        Parameters
+        Functions
         ----------
-            points : list of tuples
-                 Collection of x,y pairs for algorithm to be run on.
+            greedy
+                 Simple algorithm that takes next closest point.
 """
 import random
 import sys
 import utils
+
 
 def greedy(points):
     """
@@ -23,23 +24,24 @@ def greedy(points):
     -------
         tour_points : tuple of tuples
             Of the form (k,(x,y)), where k is the position in the generated tour that (x,y) is visited.
+        cost : int
+            Distance of solution tour.
     """
     # variables
     num_points = len(points)
-    visited = [False]*num_points # to store which cities covered
-    tour = []
+    visited = [False]*num_points    # to store which cities covered
     cost = 0
-    start = random.randint(0, num_points) # randomly select a starting number
+    start = random.randint(0, num_points)   # randomly select a starting number
 
-    visited[start] = True # visit the start
-    tour = [start] # append to this list
+    visited[start] = True   # visit the start
+    tour = [start]  # append to this list
 
     # calculate euclidean distances between all points and save as a matrix called graph
     graph = utils.graph_generator(points)
 
     # apply the greedy algorithm - take the closest unvisited point to the current one
     for _ in range(num_points - 1):
-        min_cost = sys.maxsize # create holding variables for cost and next point
+        min_cost = sys.maxsize  # create holding variables for cost and next point
         next_point = None
 
         for point in range(num_points):
@@ -56,4 +58,4 @@ def greedy(points):
 
     # finally return the points ordered by tour
     tour_points = sorted(zip(tour, points), key=lambda pair: pair[0])
-    return tour_points
+    return tour_points, cost
